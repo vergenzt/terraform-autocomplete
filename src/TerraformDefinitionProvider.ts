@@ -1,12 +1,15 @@
-import { 
-    DefinitionProvider,
-    TextDocument,
-    Position,
-    CancellationToken,
-    Definition
-} from "vscode";
 import * as _ from "lodash";
-import * as opn from "opn";
+
+import {
+    CancellationToken,
+    Definition,
+    DefinitionProvider,
+    Location,
+    Position,
+    TextDocument,
+    Uri,
+} from "vscode";
+
 var urls = require("../../aws-urls.json");
 
 export class TerraformDefinitionProvider implements DefinitionProvider {
@@ -14,9 +17,6 @@ export class TerraformDefinitionProvider implements DefinitionProvider {
         var word = document.getWordRangeAtPosition(position);
         var words = document.getText(word);
         var found = _.get(urls, words);
-        if (found) {
-            opn(found);
-        }
-        return null;
+        return found ? new Location(Uri.parse(found), new Position(0, 0)) : null;
     }
 }
